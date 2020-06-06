@@ -1,0 +1,3 @@
+rootProject.name='ECamera2'
+include ':app'
+include ':ecamera2'
