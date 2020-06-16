@@ -2,6 +2,7 @@ package com.xjl.ecamera2.image_listener;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.graphics.ImageFormat;
 import android.hardware.camera2.CaptureResult;
 import android.location.Location;
 import android.media.Image;
@@ -28,26 +29,16 @@ public class EJPEGAvailableListener extends EImageAvaliableListener {
 
     private Context context;
 
+    public int format = ImageFormat.JPEG;
+
     public EJPEGAvailableListener(Context context) {
         this.context = context;
     }
 
-    /**
-     * 可以拿到缩率图
-     */
-    private CaptureResult captureResult;
-
-    public CaptureResult getCaptureResult() {
-        return captureResult;
-    }
-
-    public void setCaptureResult(CaptureResult captureResult) {
-        this.captureResult = captureResult;
-    }
 
     @Override
     public void onImageAvailable(ImageReader imageReader) {
-        if (captureResult != null) {
+        if (getCaptureResult() != null) {
             Image image = imageReader.acquireNextImage();
             if (image != null) {
                 ByteBuffer jpegByteBuffer = image.getPlanes()[0].getBuffer();
@@ -58,16 +49,19 @@ public class EJPEGAvailableListener extends EImageAvaliableListener {
                 int imageHeight = image.getHeight();
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS", Locale.getDefault());
-                long date=System.currentTimeMillis();
+                long date = System.currentTimeMillis();
                 String title = "IMG_" + simpleDateFormat.format(date);
                 String displayName = title + ".jpeg";
 
                 Log.e(TAG, displayName);
 
-                int orientation = captureResult.get(CaptureResult.JPEG_ORIENTATION);
-                Location location = captureResult.get(CaptureResult.JPEG_GPS_LOCATION);
-                double longitude = location.getLongitude();
-                double latitude = location.getLatitude();
+                int orientation = getCaptureResult().get(CaptureResult.JPEG_ORIENTATION);
+                Location location = getCaptureResult().get(CaptureResult.JPEG_GPS_LOCATION);
+                double longitude = 0, latitude = 0;
+                if (location != null) {
+                    longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                }
 
                 File file = new File(filePath + File.separator + displayName);
 
@@ -96,7 +90,7 @@ public class EJPEGAvailableListener extends EImageAvaliableListener {
             }
         }
         //此次逻辑处理完毕 将返回的result 置空
-        captureResult = null;
+        setCaptureResult(null);
     }
 
 

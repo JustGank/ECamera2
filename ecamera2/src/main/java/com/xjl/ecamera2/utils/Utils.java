@@ -1,9 +1,14 @@
-package com.xjl.ecamera2_demo;
+package com.xjl.ecamera2.utils;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraCharacteristics;
+import android.location.Location;
+import android.location.LocationManager;
 import android.view.Surface;
 import android.view.WindowManager;
+
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,5 +83,12 @@ public class Utils {
         return (sensorOrientation + myDeviceOrientation + 360) % 360;
     }
 
+    public static Location getLocation(Context context){
+        LocationManager locationManager= (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager != null && ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        }
+        return null;
+    }
 
 }

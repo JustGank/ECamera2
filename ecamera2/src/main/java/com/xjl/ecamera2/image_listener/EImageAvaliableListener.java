@@ -1,6 +1,7 @@
 package com.xjl.ecamera2.image_listener;
 
 
+import android.hardware.camera2.CaptureResult;
 import android.media.ImageReader;
 import android.os.Environment;
 
@@ -24,7 +25,18 @@ public abstract class EImageAvaliableListener implements ImageReader.OnImageAvai
             file.mkdirs();
         }
     }
+    /**
+     * 可以拿到缩率图
+     */
+    private CaptureResult captureResult;
 
+    public CaptureResult getCaptureResult() {
+        return captureResult;
+    }
+
+    public void setCaptureResult(CaptureResult captureResult) {
+        this.captureResult = captureResult;
+    }
 
     public String getFileName() {
         long date = System.currentTimeMillis();

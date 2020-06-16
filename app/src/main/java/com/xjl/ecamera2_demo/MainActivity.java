@@ -18,7 +18,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String[] REQUEST_PERMISSONS = {
             android.Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     CaptureFragment captureFragment;
 
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.switch_camera:
                 break;
             case R.id.capture:
+                captureFragment.takePhoto();
                 break;
         }
     }
