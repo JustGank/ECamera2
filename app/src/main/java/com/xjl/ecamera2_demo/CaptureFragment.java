@@ -1,11 +1,9 @@
 package com.xjl.ecamera2_demo;
 
 import android.graphics.SurfaceTexture;
-import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
 import android.media.ImageReader;
 import android.os.Bundle;
@@ -23,9 +21,6 @@ import androidx.fragment.app.Fragment;
 
 import com.xjl.ecamera2.helper.CameraHelper;
 import com.xjl.ecamera2.image_listener.EJPEGAvailableListener;
-
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.LinkedBlockingDeque;
 
 public class CaptureFragment extends Fragment {
 
@@ -71,7 +66,7 @@ public class CaptureFragment extends Fragment {
                     Log.e(TAG, "not support ImageFormat =" + ejpegAvailableListener.format);
                 }
                 //建立回话时 就要携带需要 有会话的Surface
-                cameraHelper.setSurace(previewSurface ,imageReaderSurface);
+                cameraHelper.setSurace(previewSurface,imageReaderSurface);
 
 
         }
@@ -113,7 +108,7 @@ public class CaptureFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         cameraHelper = new CameraHelper(getContext());
-        cameraHelper.setCameraCaptureCallback(captureCallback);
+
         if (!cameraHelper.openCameraByFacing(getContext(), defaultOpenFacing)) {
             Log.e(TAG, "无此方向摄像头!");
         }
@@ -133,7 +128,7 @@ public class CaptureFragment extends Fragment {
         public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
             Log.e(TAG, "CaptureCallback onCaptureCompleted");
-           // ejpegAvailableListener.setCaptureResult(result);
+            ejpegAvailableListener.setCaptureResult(result);
         }
     };
 

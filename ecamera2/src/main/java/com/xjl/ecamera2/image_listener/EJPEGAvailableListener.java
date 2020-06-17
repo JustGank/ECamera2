@@ -7,18 +7,11 @@ import android.hardware.camera2.CaptureResult;
 import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -32,14 +25,22 @@ public class EJPEGAvailableListener extends EImageAvaliableListener {
     public int format = ImageFormat.JPEG;
 
     public EJPEGAvailableListener(Context context) {
+        Log.e(TAG,"filePath= "+filePath);
+        File file = new File(filePath);
+        if (!file.exists()) {
+            Log.e(TAG,"filePath= "+filePath +" MKDIRS="+file.mkdirs());
+
+        }
         this.context = context;
     }
 
 
     @Override
     public void onImageAvailable(ImageReader imageReader) {
+        Log.e(TAG, "onImageAvailable capture result is null"+(getCaptureResult()==null));
+        Image image = imageReader.acquireNextImage();
         if (getCaptureResult() != null) {
-            Image image = imageReader.acquireNextImage();
+
             if (image != null) {
                 ByteBuffer jpegByteBuffer = image.getPlanes()[0].getBuffer();
                 byte[] jpegByteArray = new byte[jpegByteBuffer.remaining()];
@@ -85,10 +86,9 @@ public class EJPEGAvailableListener extends EImageAvaliableListener {
                 values.put(MediaStore.Images.ImageColumns.LONGITUDE, longitude);
                 values.put(MediaStore.Images.ImageColumns.LATITUDE, latitude);
                 this.context.getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
-                image.close();
             }
         }
+        image.close();
         //此次逻辑处理完毕 将返回的result 置空
         setCaptureResult(null);
     }

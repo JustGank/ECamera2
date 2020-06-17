@@ -9,9 +9,10 @@ import android.hardware.camera2.CameraCaptureSession;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraDevice;
 import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CaptureFailure;
 import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.CaptureResult;
 import android.hardware.camera2.TotalCaptureResult;
-import android.location.Location;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -246,11 +247,50 @@ public class CameraHelper {
         }
     };
 
-    CameraCaptureSession.CaptureCallback captureCallback;
+    CameraCaptureSession.CaptureCallback captureCallback=new CameraCaptureSession.CaptureCallback() {
+        @Override
+        public void onCaptureStarted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, long timestamp, long frameNumber) {
+            super.onCaptureStarted(session, request, timestamp, frameNumber);
+            Log.e(TAG,"onCaptureStarted");
+        }
 
-    public void setCameraCaptureCallback(CameraCaptureSession.CaptureCallback captureCallback) {
-        this.captureCallback = captureCallback;
-    }
+        @Override
+        public void onCaptureProgressed(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull CaptureResult partialResult) {
+            super.onCaptureProgressed(session, request, partialResult);
+            Log.e(TAG,"onCaptureProgressed");
+        }
+
+        @Override
+        public void onCaptureFailed(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull CaptureFailure failure) {
+            super.onCaptureFailed(session, request, failure);
+            Log.e(TAG,"onCaptureFailed "+failure.getReason()+"   ");
+        }
+
+        @Override
+        public void onCaptureSequenceCompleted(@NonNull CameraCaptureSession session, int sequenceId, long frameNumber) {
+            super.onCaptureSequenceCompleted(session, sequenceId, frameNumber);
+            Log.e(TAG,"onCaptureSequenceCompleted");
+        }
+
+        @Override
+        public void onCaptureSequenceAborted(@NonNull CameraCaptureSession session, int sequenceId) {
+            super.onCaptureSequenceAborted(session, sequenceId);
+            Log.e(TAG,"onCaptureSequenceAborted");
+        }
+
+        @Override
+        public void onCaptureBufferLost(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull Surface target, long frameNumber) {
+            super.onCaptureBufferLost(session, request, target, frameNumber);
+            Log.e(TAG,"onCaptureBufferLost");
+        }
+
+        @Override
+        public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
+            super.onCaptureCompleted(session, request, result);
+            Log.e(TAG,"onCaptureCompleted");
+        }
+    };
+
 
     /**
      * 工具类型的方法

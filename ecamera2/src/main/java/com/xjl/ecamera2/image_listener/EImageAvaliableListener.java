@@ -6,7 +6,6 @@ import android.media.ImageReader;
 import android.os.Environment;
 
 import java.io.File;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,13 +16,10 @@ public abstract class EImageAvaliableListener implements ImageReader.OnImageAvai
 
     public String displayTitle;
 
-    public String filePath=Environment.getExternalStorageDirectory().getPath() + File.separator + "ECamera2";
+    public String filePath=Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "ECamera2";
 
     public EImageAvaliableListener() {
-        File file = new File(filePath);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+
     }
     /**
      * 可以拿到缩率图
